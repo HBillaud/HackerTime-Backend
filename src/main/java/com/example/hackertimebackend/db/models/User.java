@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -20,6 +22,8 @@ public class User {
     private String password;
     private String salt;
     private Boolean verified;
+    private String verificationCode;
+    private Date createdDate;
 
     @Override
     public String toString() {

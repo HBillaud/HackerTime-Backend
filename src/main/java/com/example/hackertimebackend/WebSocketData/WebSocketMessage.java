@@ -1,14 +1,15 @@
 package com.example.hackertimebackend.WebSocketData;
 
 public class WebSocketMessage {
+    private String user;
     private String content;
 
-
-    public WebSocketMessage() {
+    public String getUser() {
+        return this.user;
     }
 
-    public WebSocketMessage(String content) {
-        this.content = content;
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public String getContent() {
@@ -19,16 +20,10 @@ public class WebSocketMessage {
         this.content = content;
     }
 
-    public WebSocketMessage content(String content) {
-        setContent(content);
-        return this;
+    public WebSocketMessage(String user, String content) {
+        this.user = user;
+        this.content = content;
     }
-
-    @Override
-    public String toString() {
-        return "{" +
-            " content='" + getContent() + "'" +
-            "}";
-    }
-
 }
+
+    

@@ -1,4 +1,4 @@
-package com.example.hackertimebackend;
+package com.example.hackertimebackend.WebSocket;
 
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import org.springframework.context.annotation.Configuration;

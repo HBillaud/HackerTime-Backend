@@ -1,7 +1,8 @@
-package com.example.hackertimebackend;
+package com.example.hackertimebackend.WebSocket;
 
 import com.example.hackertimebackend.WebSocketData.WebSocketMessage;
 
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -14,11 +15,12 @@ public class WebSocketProxy {
         System.out.println("Proxy Initialized!");
     }
 
-    @MessageMapping("/hello")
-    @SendTo("/topic/greetings")
-    public WebSocketMessage greeting(WebSocketMessage message) throws Exception {
+    @MessageMapping("/{room}")
+    @SendTo("/topic/{room}")
+    public WebSocketMessage greeting(@DestinationVariable String room, WebSocketMessage message) throws Exception {
+        System.out.println("Room created: " + room);
         System.out.println("Message received: " + message.getContent());
-        Thread.sleep(1000);
-        return new WebSocketMessage("Hello, " + HtmlUtils.htmlEscape(message.getContent()));
+        System.out.println("User is: " + message.getUser());
+        return new WebSocketMessage(message.getUser(), message.getContent());
     }
 }

@@ -40,6 +40,15 @@ function showGreeting(message) {
     $("#greetings").append("<tr><td>" + message.user + ": " + message.content + "</td></tr>");
 }
 
+function update_button() {
+    document.getElementById('message').addEventListener('keyup', e => {
+        console.log('Caret at: ', e.target.selectionStart)
+      })
+    document.getElementById('message').addEventListener('mouseup', e => {
+    console.log('Caret at: ', e.target.selectionStart)
+    })
+}
+
 $(function () {
     $("form").on('submit', function (e) {
         e.preventDefault();

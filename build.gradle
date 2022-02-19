@@ -46,6 +46,7 @@ dependencies {
 tasks.named('test') {
     outputs.dir snippetsDir
     useJUnitPlatform()
+    testLogging.showStandardStreams=true
 }
 
 tasks.named('asciidoctor') {

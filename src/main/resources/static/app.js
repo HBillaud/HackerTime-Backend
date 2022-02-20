@@ -18,11 +18,18 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/room_123', function (greeting) {
+        stompClient.subscribe('/topic/' + document.getElementById("room_code").value, function (greeting) {
             showGreeting(JSON.parse(greeting.body));
         });
     });
 } 
+
+function Send_changes() {
+    current_cursor = $("#message").prop("selectionStart") - 1;
+    stompClient.send("/app/" + document.getElementById("room_code").value, {}, JSON.stringify({'from_user': document.getElementById("position").value,
+        'cursor_move': 1, 'change_type': 'add', 'Init_index': current_cursor, 'End_index': current_cursor + 1,
+    'context': 'a', 'size': 1}));
+}
 
 function disconnect() {
     if (stompClient !== null) {
@@ -36,17 +43,32 @@ function sendName() {
     stompClient.send("/app/room_123", {}, JSON.stringify({'user': $("#name").val(), 'content': $("#message").val()}));
 }
 
-function showGreeting(message) {
-    $("#greetings").append("<tr><td>" + message.user + ": " + message.content + "</td></tr>");
+function showGreeting(changes) {
+    if (changes.from_user != document.getElementById("position").value) {
+        if (changes.change_type == "add") {
+            current_cursor = $("#message").prop("selectionStart");
+            current_content = document.getElementById("message").value;
+            if (current_content == null) {
+                console.log("reset current content");
+                current_content = "";
+            }
+            current_content = current_content.slice(0, changes.Init_index) + changes.context + current_content.slice(changes.Init_index);
+            console.log("current content is " + current_content);
+            console.log("original cursor is at index " + current_cursor);
+            current_cursor += changes.cursor_move;
+            console.log("now cursor is at index " + current_cursor);
+            document.getElementById("message").value = current_content;
+            document.getElementById("message").selectionEnd = current_cursor;
+        }
+    }
 }
 
-function update_button() {
-    document.getElementById('message').addEventListener('keyup', e => {
-        console.log('Caret at: ', e.target.selectionStart)
-      })
-    document.getElementById('message').addEventListener('mouseup', e => {
-    console.log('Caret at: ', e.target.selectionStart)
-    })
+function become_recruiter() {
+    window.localStorage.setItem("whoami", "recruiter");
+}
+
+function become_interviewee() {
+    window.localStorage.setItem("whoami", "interviewee");
 }
 
 $(function () {

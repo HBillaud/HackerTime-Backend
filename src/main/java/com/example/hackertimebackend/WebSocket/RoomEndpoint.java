@@ -1,10 +1,14 @@
 package com.example.hackertimebackend.WebSocket;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
+import com.example.hackertimebackend.OTStuff.OT;
 import com.example.hackertimebackend.WebSocketData.InterviewRoomSetting;
 import com.example.hackertimebackend.WebSocketData.Interviewer;
+import com.example.hackertimebackend.WebSocketData.WebSocketGlobalData;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class RoomEndpoint {
-
-    public static ArrayList<InterviewRoomSetting> AllRooms;
 
     public String CodeGenerator(int size) {
         int leftLimit = 65; // letter 'A'
@@ -38,7 +40,8 @@ public class RoomEndpoint {
         String newCode = CodeGenerator(30);
         InterviewRoomSetting newRoom = new InterviewRoomSetting();
         newRoom.RoomCode = newCode;
-        AllRooms.add(newRoom);
+        WebSocketGlobalData.Room_mapper.put(newCode, WebSocketGlobalData.AllRooms.size());
+        WebSocketGlobalData.AllRooms.add(newRoom);
         return newCode;
     }
 }

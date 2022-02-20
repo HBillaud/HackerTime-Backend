@@ -1,11 +1,19 @@
 package com.example.hackertimebackend.WebSocketData;
 
+import com.example.hackertimebackend.OTStuff.OT;
+import com.example.hackertimebackend.OTStuff.OTUser;
+
 public class InterviewRoomSetting {
     public String RoomCode;
     public String InterviewerName;
     public String IntervieweeName;
+    public OT ot_room;
 
     public InterviewRoomSetting() {
+        ot_room = new OT();
+        ot_room.recruiter = new OTUser();
+        ot_room.interviewee = new OTUser();
+        ot_room.initialize();
     }
 
     public InterviewRoomSetting(String RoomCode, String InterviewerName, String IntervieweeName) {

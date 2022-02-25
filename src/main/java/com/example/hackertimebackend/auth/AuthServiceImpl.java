@@ -5,9 +5,15 @@ import com.example.hackertimebackend.commons.UserResponse;
 import com.example.hackertimebackend.commons.UserSignupRequest;
 import com.example.hackertimebackend.db.models.User;
 import com.example.hackertimebackend.db.repositories.UserRepository;
-import com.example.hackertimebackend.utils.PasswordUtils;
+import com.example.hackertimebackend.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -17,25 +23,39 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
-
-    private final UserRepository userRepository;
-    private final EmailVerification emailVerification;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private EmailVerification emailVerification;
+    @Autowired
+    private JwtUtils jwtUtils;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserResponse login(UserLoginRequest request) throws Exception {
         return userRepository.findById(request.getEmail()).map(
                 User -> {
                     try {
-                        validateLogin(User, request.getPassword());
+                        if (!User.getVerified()) throw new Exception(String.format("User with email: %s is not " +
+                                "verified", request.getEmail()));
+                        Authentication authentication = authenticationManager.authenticate(
+                                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+                        );
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                        String jwt = jwtUtils.generateJwtToken(authentication);
+
                         log.info("User successfully logged in!");
-                        return UserResponse.builder().email(User.getEmail()).name(User.getName()).companyName(User.getCompanyName()).build();
+                        return UserResponse.builder().email(User.getEmail()).name(User.getName()).companyName(User.getCompanyName()).jwtToken(jwt).build();
                     } catch (Exception e) {
                         log.error("", e);
                         return null;
                     }
                 }
         ).orElseThrow(
-                () -> new Exception(String.format("User with email: %s not found!", request.getEmail()))
+                () -> new Exception(String.format("Logging for: %s Failed!", request.getEmail()))
         );
     }
 
@@ -44,17 +64,12 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.existsById(request.getEmail())) {
             throw new Exception(String.format("User with email: %s already exists!", request.getEmail()));
         } else {
-            String salt = UUID.randomUUID().toString();
-            String password = PasswordUtils.encryptFullPassword(
-                    PasswordUtils.encryptEmailPassword(request.getEmail(), request.getPassword()),
-                    salt);
             String verificationCode = UUID.randomUUID().toString();
             User user = User.builder()
                     .email(request.getEmail())
                     .companyName(request.getCompanyName())
                     .name(request.getName())
-                    .password(password)
-                    .salt(salt)
+                    .password(passwordEncoder.encode(request.getPassword()))
                     .createdDate(new Date())
                     .verified(false)
                     .verificationCode(verificationCode)
@@ -70,14 +85,5 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void verify(String id, String code) throws Exception {
         emailVerification.verifyUser(id, code);
-    }
-
-    private void validateLogin(User user, String password) throws Exception {
-        if (!user.getVerified()) {
-            throw new Exception(String.format("User with email: %s is not verified!", user.getEmail()));
-        }
-        if (!PasswordUtils.validatePassword(user, password)) {
-            throw new Exception("Password is incorrect!");
-        }
     }
 }

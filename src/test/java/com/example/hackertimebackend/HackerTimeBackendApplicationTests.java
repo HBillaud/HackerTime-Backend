@@ -60,6 +60,7 @@ class HackerTimeBackendApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
     @Test

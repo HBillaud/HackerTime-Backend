@@ -29,11 +29,11 @@ public class EmailVerificationImpl implements EmailVerification {
         MimeMessageHelper helper = new MimeMessageHelper(msg, true);
         String url =
                 LOCALHOST + BASE_PATH_AUTH + EMAIL_VERIFICATION_PATH + "?id=" + user.getEmail() + "&code=" + user.getVerificationCode();
-        String body = "Hello [[name]], <br>"
+        String body = "Hello [[name]], <br><br>"
                 + "Thank you for creating a Hackertime account. Please click the link below to verify your registration before login:<br>"
                 + "<h3><a href=\"[[URL]]\">Verify</a></h3>"
-                + "Thank you,<br>"
-                + "Hackertime Team.";
+                + "Thank you,<br><br>"
+                + "Hackertime Team";
 
         body = body.replace("[[name]]", user.getName());
         body = body.replace("[[URL]]", url);

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -20,15 +21,15 @@ public class User {
     private String name;
     private String companyName;
     private String password;
-    private String salt;
     private Boolean verified;
     private String verificationCode;
+    @CreatedDate
     private Date createdDate;
 
     @Override
     public String toString() {
         return String.format(
-                "User[email=%s, name=%s, companyName=%s", email, name, companyName
+                "User[email=%s, name=%s, companyName=%s]", email, name, companyName
         );
     }
 }

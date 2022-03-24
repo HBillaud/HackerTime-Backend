@@ -3,7 +3,7 @@ package com.example.hackertimebackend.services;
 import com.example.hackertimebackend.auth.AuthServiceImpl;
 import com.example.hackertimebackend.auth.EmailVerificationImpl;
 import com.example.hackertimebackend.commons.UserLoginRequest;
-import com.example.hackertimebackend.commons.UserResponse;
+import com.example.hackertimebackend.commons.UserLoginResponse;
 import com.example.hackertimebackend.commons.UserSignupRequest;
 import com.example.hackertimebackend.db.models.User;
 import com.example.hackertimebackend.db.repositories.UserRepository;
@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureMockRestServiceServer;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -43,7 +42,7 @@ class AuthServiceTest {
     UserLoginRequest request = new UserLoginRequest(
             "hpcbillaud@gmail.com",
             "test");
-    UserResponse response = new UserResponse(
+    UserLoginResponse response = new UserLoginResponse(
             "John Wick",
             "hpcbillaud@gmail.com",
             "N/A",
@@ -62,7 +61,7 @@ class AuthServiceTest {
     public void whenValidInputLoginReturnSuccessfulLogin() throws Exception {
         given(userRepository.findById(request.getEmail())).willReturn(Optional.of(user));
 
-        UserResponse actual = authService.login(
+        UserLoginResponse actual = authService.login(
                 request
         );
 
@@ -105,14 +104,14 @@ class AuthServiceTest {
                 "test",
                 "Co."
         );
-        UserResponse expected = new UserResponse(
+        UserLoginResponse expected = new UserLoginResponse(
                 "test_test",
                 "test@Test.com",
                 "Co.",
                 null
         );
 
-        UserResponse actual = authService.signup(request);
+        UserLoginResponse actual = authService.signup(request);
 
         assertThat(actual).isEqualTo(expected);
     }

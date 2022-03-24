@@ -1,7 +1,7 @@
 package com.example.hackertimebackend.auth;
 
 import com.example.hackertimebackend.commons.UserLoginRequest;
-import com.example.hackertimebackend.commons.UserResponse;
+import com.example.hackertimebackend.commons.UserLoginResponse;
 import com.example.hackertimebackend.commons.UserSignupRequest;
 import com.example.hackertimebackend.db.models.User;
 import com.example.hackertimebackend.db.repositories.UserRepository;
@@ -35,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public UserResponse login(UserLoginRequest request) throws Exception {
+    public UserLoginResponse login(UserLoginRequest request) throws Exception {
         return userRepository.findById(request.getEmail()).map(
                 User -> {
                     try {
@@ -48,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
                         String jwt = jwtUtils.generateJwtToken(authentication);
 
                         log.info("User successfully logged in!");
-                        return UserResponse.builder().email(User.getEmail()).name(User.getName()).companyName(User.getCompanyName()).jwtToken(jwt).build();
+                        return UserLoginResponse.builder().email(User.getEmail()).name(User.getName()).companyName(User.getCompanyName()).jwtToken(jwt).build();
                     } catch (Exception e) {
                         log.error("", e);
                         return null;
@@ -60,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserResponse signup(UserSignupRequest request) throws Exception {
+    public UserLoginResponse signup(UserSignupRequest request) throws Exception {
         if (userRepository.existsById(request.getEmail())) {
             throw new Exception(String.format("User with email: %s already exists!", request.getEmail()));
         } else {
@@ -78,7 +78,7 @@ public class AuthServiceImpl implements AuthService {
             userRepository.save(user);
             emailVerification.sendVerificationEmail(user);
 
-            return UserResponse.builder().email(user.getEmail()).companyName(user.getCompanyName()).name(user.getName()).build();
+            return UserLoginResponse.builder().email(user.getEmail()).companyName(user.getCompanyName()).name(user.getName()).build();
         }
     }
 

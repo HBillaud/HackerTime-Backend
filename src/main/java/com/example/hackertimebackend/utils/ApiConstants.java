@@ -6,4 +6,6 @@ public class ApiConstants {
     public static final String LOGIN_PATH = "/login";
     public static final String SIGNUP_PATH = "/signup";
     public static final String EMAIL_VERIFICATION_PATH = "/verify";
+    public static final String USER_PATH = "/user/{id}";
+    public static final String BASE_PATH = "/v1";
 }

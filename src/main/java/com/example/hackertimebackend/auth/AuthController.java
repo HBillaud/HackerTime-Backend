@@ -1,7 +1,7 @@
 package com.example.hackertimebackend.auth;
 
 import com.example.hackertimebackend.commons.UserLoginRequest;
-import com.example.hackertimebackend.commons.UserResponse;
+import com.example.hackertimebackend.commons.UserLoginResponse;
 import com.example.hackertimebackend.commons.UserSignupRequest;
 import com.example.hackertimebackend.db.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +31,9 @@ public class AuthController {
     ) throws Exception {
         log.info("[POST] login request: {}", userLoginRequest);
         try {
-            UserResponse userResponse = authService.login(userLoginRequest);
-            ResponseEntity response = new ResponseEntity(userResponse, HttpStatus.OK);
-            log.info("[POST] login response: {}", userResponse);
+            UserLoginResponse userLoginResponse = authService.login(userLoginRequest);
+            ResponseEntity response = new ResponseEntity(userLoginResponse, HttpStatus.OK);
+            log.info("[POST] login response: {}", userLoginResponse);
             return response;
         } catch (Exception e) {
             log.error("", e);
@@ -47,9 +47,9 @@ public class AuthController {
     ) throws Exception {
         log.info("[POST] signup request: {}", userSignupRequest);
         try {
-            UserResponse userResponse = authService.signup(userSignupRequest);
-            ResponseEntity response = new ResponseEntity(userResponse, HttpStatus.CREATED);
-            log.info("[POST] signup response: {}", userResponse);
+            UserLoginResponse userLoginResponse = authService.signup(userSignupRequest);
+            ResponseEntity response = new ResponseEntity(userLoginResponse, HttpStatus.CREATED);
+            log.info("[POST] signup response: {}", userLoginResponse);
             return response;
         } catch (Exception e) {
             userRepository.deleteById(userSignupRequest.getEmail());

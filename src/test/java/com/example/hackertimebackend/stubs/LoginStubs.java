@@ -1,10 +1,10 @@
 package com.example.hackertimebackend.stubs;
 
-import com.example.hackertimebackend.commons.UserResponse;
+import com.example.hackertimebackend.commons.UserLoginResponse;
 
 public class LoginStubs {
-    public UserResponse getUserResponse() {
-        return new UserResponse(
+    public UserLoginResponse getUserResponse() {
+        return new UserLoginResponse(
                 "John Wick",
                 "hpcbillaud@gmail.com",
                 "N/A",

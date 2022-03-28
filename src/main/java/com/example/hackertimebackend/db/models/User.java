@@ -21,6 +21,7 @@ public class User {
     private String name;
     private String companyName;
     private String password;
+    private String[] reportIds;
     private Boolean verified;
     private String verificationCode;
     @CreatedDate

@@ -2,15 +2,13 @@ package com.example.hackertimebackend.report;
 
 import com.example.hackertimebackend.commons.ReportRequest;
 import com.example.hackertimebackend.db.models.Report;
+import com.example.hackertimebackend.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -23,14 +21,17 @@ import static com.example.hackertimebackend.utils.ApiConstants.*;
 public class ReportController {
     @Autowired
     private ReportService reportService;
+    @Autowired
+    private UserService userService;
 
-    @PostMapping()
+    @PostMapping(END_MEETING_PATH)
     public ResponseEntity generateReport(
-            @RequestBody @Valid ReportRequest body
+            @RequestBody @Valid ReportRequest body, @RequestHeader(value = "Authorization") String token
     ) throws Exception {
         log.info("[POST] meeting ended; generating report: {}", body);
         try {
-            Report report = reportService.generateReport();
+            Report report = reportService.generateReport(body);
+            userService.addReport(report.getId(), token);
             ResponseEntity response = new ResponseEntity(report, HttpStatus.CREATED);
             return response;
         } catch (Exception e) {

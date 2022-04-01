@@ -4,6 +4,13 @@ public class CodeStruct {
     String code;
     String lang;
 
+    public CodeStruct(String code, String lang) {
+        this.code = code;
+        this.lang = lang;
+    }
+
+    public CodeStruct() {}
+
     public String getCode() {
         return this.code;
     }
@@ -12,16 +19,11 @@ public class CodeStruct {
         this.code = code;
     }
 
-    public String getLanguage() {
+    public String getLang() {
         return this.lang;
     }
 
-    public void setLanguage(String lang) {
-        this.lang = lang;
-    }
-
-    public CodeStruct(String code, String lang) {
-        this.code = code;
+    public void setLang(String lang) {
         this.lang = lang;
     }
 

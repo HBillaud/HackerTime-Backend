@@ -37,4 +37,12 @@ public class WebSocketProxy {
         }
         return null;
     }
+
+
+    @MessageMapping("/001")
+    @SendTo("/topic/001")
+    public String sendChange(String code) throws Exception {
+        System.out.println("CHECKING");
+        return code;
+    }
 }

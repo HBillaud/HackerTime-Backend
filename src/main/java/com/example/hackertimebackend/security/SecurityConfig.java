@@ -48,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/**").permitAll()
                 .antMatchers("/v1/auth/**").permitAll()
                 .antMatchers("/v1/topic/**").permitAll()
                 .antMatchers("/getCode").permitAll() // Will Remove Later

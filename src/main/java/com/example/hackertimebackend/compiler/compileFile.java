@@ -10,6 +10,8 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.validation.constraints.Null;
+
 
 public class compileFile {
 
@@ -51,7 +53,16 @@ public class compileFile {
         String line;
         String error = "";
         String output = "";
-        Process p = new ProcessBuilder("/bin/bash",bash_name).start();
+        ProcessBuilder pb = new ProcessBuilder("/bin/bash",bash_name);
+        long pid = -1;
+        try {
+            Process p = pb.start();
+            pid = p.pid();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw e;
+        }
+            
         BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
         BufferedReader err = new BufferedReader(new InputStreamReader(p.getErrorStream()));
         while ((line = err.readLine()) != null) {

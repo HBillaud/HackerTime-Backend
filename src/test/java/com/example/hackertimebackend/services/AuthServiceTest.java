@@ -9,6 +9,7 @@ import com.example.hackertimebackend.db.models.User;
 import com.example.hackertimebackend.db.repositories.UserRepository;
 import com.example.hackertimebackend.utils.JwtUtils;
 import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -52,6 +53,7 @@ class AuthServiceTest {
             "John Wick",
             "N/A",
             "$2a$10$u2JehPNmeoVDhfk7GBSiseFySTS9I5MokHFXD.XZ.dOMsrKqZhb.G",
+            new ObjectId[0],
             true,
             "da91a2c8-4a00-4368-b922-7a035d306231",
             null
@@ -137,7 +139,6 @@ class AuthServiceTest {
 
         UserResponse actual = RestAssuredMockMvc.given()
                 .contentType(ContentType.JSON)
-                .header(X_TRANSACTION_ID, X_TRANSACTION_ID_HDR_STUB)
                 .header(AUTHORIZATION, AUTHORIZATION_HDR_STUB)
                 .body(request)
                 .post(ApiConstants.LOGIN_PATH)
@@ -158,7 +159,6 @@ class AuthServiceTest {
 
         RestAssuredMockMvc.given()
                 .contentType(ContentType.JSON)
-                .header(X_TRANSACTION_ID, X_TRANSACTION_ID_HDR_STUB)
                 .header(AUTHORIZATION, AUTHORIZATION_HDR_STUB)
                 .body(request)
                 .post(ApiConstants.LOGIN_PATH)

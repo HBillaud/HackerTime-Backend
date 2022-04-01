@@ -28,7 +28,7 @@ public class EmailVerificationImpl implements EmailVerification {
         MimeMessage msg = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(msg, true);
         String url =
-                LOCALHOST + BASE_PATH_AUTH + EMAIL_VERIFICATION_PATH + "?id=" + user.getEmail() + "&code=" + user.getVerificationCode();
+                URL + BASE_PATH_AUTH + EMAIL_VERIFICATION_PATH + "?id=" + user.getEmail() + "&code=" + user.getVerificationCode();
         String body = "Hello [[name]], <br><br>"
                 + "Thank you for creating a Hackertime account. Please click the link below to verify your registration before login:<br>"
                 + "<h3><a href=\"[[URL]]\">Verify</a></h3>"

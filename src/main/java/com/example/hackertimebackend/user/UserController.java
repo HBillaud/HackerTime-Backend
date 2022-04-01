@@ -1,16 +1,12 @@
 package com.example.hackertimebackend.user;
 
 import com.example.hackertimebackend.commons.UserResponse;
-import com.example.hackertimebackend.db.models.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.example.hackertimebackend.utils.ApiConstants.*;
 
@@ -24,11 +20,11 @@ public class UserController {
 
     @GetMapping(USER_PATH)
     public ResponseEntity getUser(
-            @PathVariable String id
+            @RequestHeader(value = "Authorization") String token
     ) throws Exception {
-        log.info("[GET] get user request: {}", id);
+        log.info("[GET] get user request: {}", token);
         try {
-            UserResponse user = userService.getUser(id);
+            UserResponse user = userService.getUser(token);
             ResponseEntity response = new ResponseEntity(user, HttpStatus.OK);
             log.info("[GET] user response: {}", user);
             return response;

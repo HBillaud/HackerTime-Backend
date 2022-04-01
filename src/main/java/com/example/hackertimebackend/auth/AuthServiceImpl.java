@@ -8,6 +8,7 @@ import com.example.hackertimebackend.db.repositories.UserRepository;
 import com.example.hackertimebackend.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -70,6 +71,7 @@ public class AuthServiceImpl implements AuthService {
                     .companyName(request.getCompanyName())
                     .name(request.getName())
                     .password(passwordEncoder.encode(request.getPassword()))
+                    .reportIds(new ObjectId[0])
                     .createdDate(new Date())
                     .verified(false)
                     .verificationCode(verificationCode)

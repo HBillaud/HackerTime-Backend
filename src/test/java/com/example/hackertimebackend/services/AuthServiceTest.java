@@ -1,7 +1,7 @@
 package com.example.hackertimebackend.services;
 
 import com.example.hackertimebackend.auth.AuthServiceImpl;
-import com.example.hackertimebackend.auth.EmailVerificationImpl;
+import com.example.hackertimebackend.auth.EmailVerification;
 import com.example.hackertimebackend.commons.UserLoginRequest;
 import com.example.hackertimebackend.commons.UserLoginResponse;
 import com.example.hackertimebackend.commons.UserSignupRequest;
@@ -26,7 +26,7 @@ import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
 @AutoConfigureMockRestServiceServer
-class AuthServiceTest {
+public class AuthServiceTest {
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -36,7 +36,7 @@ class AuthServiceTest {
     @Mock
     private JwtUtils jwtUtils;
     @Mock
-    private EmailVerificationImpl emailVerification;
+    private EmailVerification emailVerification;
     @InjectMocks
     private AuthServiceImpl authService;
 
@@ -63,9 +63,7 @@ class AuthServiceTest {
     public void whenValidInputLoginReturnSuccessfulLogin() throws Exception {
         given(userRepository.findById(request.getEmail())).willReturn(Optional.of(user));
 
-        UserLoginResponse actual = authService.login(
-                request
-        );
+        UserLoginResponse actual = authService.login(request);
 
         RecursiveComparisonConfiguration ignoreIdConfig = new RecursiveComparisonConfiguration();
         ignoreIdConfig.ignoreFields("jwtToken");

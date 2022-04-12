@@ -8,6 +8,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 @Service
@@ -31,5 +32,15 @@ public class ReportServiceImpl implements ReportService {
         } catch (Exception e) {
             throw new Exception("Generating end-meeting report failed!");
         }
+    }
+
+    public ArrayList<Report> getReports(ObjectId[] arr) {
+        ArrayList<Report> set = new ArrayList<>();
+        for (int i = 0; i < arr.length; i++) {
+            reportRepository.findById(arr[i].toString()).ifPresent(
+                    Report -> set.add(Report)
+            );
+        }
+        return set;
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 import static com.example.hackertimebackend.utils.ApiConstants.*;
 
@@ -22,6 +23,8 @@ import static com.example.hackertimebackend.utils.ApiConstants.*;
 public class AuthController {
     @Autowired
     private AuthService authService;
+    @Autowired
+    private EmailVerification emailVerification;
     @Autowired
     private UserRepository userRepository;
 
@@ -68,6 +71,22 @@ public class AuthController {
             authService.verify(id, code);
             ResponseEntity response = new ResponseEntity(HttpStatus.OK);
             log.info("email: {} successfully verified!", id);
+            return response;
+        } catch (Exception e) {
+            log.error("", e);
+            throw e;
+        }
+    }
+
+    @PostMapping(FORGOT_PASSWORD_PATH)
+    public ResponseEntity forgotPassword(
+            @RequestBody @NotBlank String email
+    ) throws Exception {
+        log.info("[POST] reset password request for email: {}", email);
+        try {
+            emailVerification.sendForgotPasswordEmail(email);
+            ResponseEntity response = new ResponseEntity(HttpStatus.OK);
+            log.info("forgot_password email sent to {}", email);
             return response;
         } catch (Exception e) {
             log.error("", e);

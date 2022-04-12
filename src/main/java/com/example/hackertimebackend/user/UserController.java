@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
+
 import static com.example.hackertimebackend.utils.ApiConstants.*;
 
 @Slf4j
@@ -28,6 +30,19 @@ public class UserController {
             ResponseEntity response = new ResponseEntity(user, HttpStatus.OK);
             log.info("[GET] user response: {}", user);
             return response;
+        } catch (Exception e) {
+            log.error("", e);
+            throw e;
+        }
+    }
+
+    @PostMapping(RESET_PASSWORD)
+    public ResponseEntity resetPassword(
+        @RequestBody @NotBlank String password
+    ) throws Exception {
+        log.info("[POST] reset password request for user: {}");
+        try {
+
         } catch (Exception e) {
             log.error("", e);
             throw e;

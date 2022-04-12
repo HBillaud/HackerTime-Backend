@@ -7,4 +7,5 @@ import javax.mail.MessagingException;
 public interface EmailVerification {
     void sendVerificationEmail(User user) throws MessagingException;
     boolean verifyUser(String id, String code) throws Exception;
+    void sendForgotPasswordEmail(String email) throws MessagingException, Exception;
 }

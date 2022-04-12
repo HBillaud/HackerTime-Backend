@@ -19,6 +19,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private JwtUtils jwtUtils;
 
+    @Override
     public UserResponse getUser(String token) throws Exception {
         return userRepository.findById(jwtUtils.getUserNameFromJwtToken(token.substring(7))).map(
                 User -> userMapper.userToUserResponse(User)
@@ -27,6 +28,7 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    @Override
     public UserResponse addReport(ObjectId reportId, String token) throws Exception {
         return userRepository.findById(jwtUtils.getUserNameFromJwtToken(token.substring(7))).map(
                 User -> {
@@ -37,5 +39,10 @@ public class UserServiceImpl implements UserService {
         ).orElseThrow(
                 () -> new Exception(String.format("Report could not be added to current user"))
         );
+    }
+
+    @Override
+    public void resetPassword(String email, String password) throws Exception {
+        // TODO add implementation
     }
 }

@@ -64,4 +64,32 @@ public class EmailVerificationImpl implements EmailVerification {
                 () -> new Exception("User does not exist!")
         );
     }
+
+    @Override
+    public void sendForgotPasswordEmail(String email) throws MessagingException, Exception {
+        if (userRepository.existsById(email)) {
+            MimeMessage msg = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+            String url = ""; // TODO edit url
+            String body = "Hello, <br><br>"
+                    + "Please click the link below to reset your password:<br>"
+                    + "<h3><a href=\"[[URL]]\">Reset Password</a></h3>"
+                    + "Thank you,<br><br>"
+                    + "Hackertime Team";
+
+            body = body.replace("[[URL]]", url);
+
+            try {
+                helper.setTo(email);
+                helper.setSubject("[Hackertime] Reset Password");
+                helper.setText(body, true);
+                mailSender.send(msg);
+            } catch (Exception e) {
+                log.info("Reset password email could not be sent!");
+                throw e;
+            }
+        } else {
+            throw new Exception(String.format("User with email: {} does not exist!", email));
+        }
+    }
 }

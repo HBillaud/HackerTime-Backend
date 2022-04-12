@@ -10,4 +10,6 @@ public class ApiConstants {
     public static final String BASE_PATH = "/v1";
     public static final String END_MEETING_PATH = "/end-meeting";
     public static final String URL = "https://hackertime-backend-springcloud-app-20220401132801.azuremicroservices.io";
+    public static final String FORGOT_PASSWORD_PATH = "/forgotPassword";
+    public static final String RESET_PASSWORD = "/resetPassword";
 }

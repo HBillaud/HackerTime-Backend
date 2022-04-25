@@ -20,11 +20,11 @@ public class UserController {
 
     @GetMapping(USER_PATH)
     public ResponseEntity getUser(
-            @RequestHeader(value = "Authorization") String token
+            @RequestHeader(value = "Authorization") String bearerToken
     ) throws Exception {
-        log.info("[GET] get user request: {}", token);
+        log.info("[GET] get user request: {}", bearerToken);
         try {
-            UserResponse user = userService.getUser(token);
+            UserResponse user = userService.getUser(bearerToken.substring(7));
             ResponseEntity response = new ResponseEntity(user, HttpStatus.OK);
             log.info("[GET] user response: {}", user);
             return response;

@@ -38,6 +38,7 @@ dependencies {
     implementation 'commons-codec:commons-codec:1.15'
     implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.2'
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
     implementation 'junit:junit:4.13.1'
     implementation "org.mapstruct:mapstruct:1.4.2.Final"
@@ -47,7 +48,6 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.springframework.security:spring-security-test'
-
 }
 
 tasks.named('test') {

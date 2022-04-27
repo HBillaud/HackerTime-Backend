@@ -18,6 +18,7 @@ public class Report {
     private ObjectId id;
     private String question;
     private String code;
+    private String output;
     private String intervieweeName;
     @CreatedDate
     private Date createdDate;

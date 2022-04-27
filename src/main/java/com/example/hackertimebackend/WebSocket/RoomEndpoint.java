@@ -33,6 +33,19 @@ public class RoomEndpoint {
         }
         return buffer.toString();
     }
+
+    public Map<String, String> compile(CodeStruct code) throws IOException {
+        System.out.println(code.lang);
+        System.out.println(code.code);
+        compileFile compiler = new compileFile();
+        String name = compiler.createTempFile(code.code, code.lang);
+        String bash_name = compiler.generate_bash_script(name);
+        String[] result = compiler.runBash(bash_name);
+        Map<String, String> return_val = new HashMap<>();
+        return_val.put("stdout", result[0]);
+        return_val.put("stderr", result[1]);
+        return return_val;
+    }
     
     @PostMapping("/hostroom")
     public ResponseEntity create_room(@RequestBody @Valid RoomRequest request) {
@@ -48,17 +61,7 @@ public class RoomEndpoint {
 
     @CrossOrigin
     @PostMapping("/getCode")
-    public Map<String, String> create_room(@RequestBody CodeStruct code) throws IOException {
-        System.out.println(code.lang);
-        System.out.println(code.code);
-        compileFile compiler = new compileFile();
-        String name = compiler.createTempFile(code.code, code.lang);
-        String bash_name = compiler.generate_bash_script(name);
-        String[] result = compiler.runBash(bash_name);
-        Map<String, String> return_val = new HashMap<>();
-        return_val.put("stdout", result[0]);
-        return_val.put("stderr", result[1]);
-        return return_val;
-
+    public Map<String, String> compile_code(@RequestBody CodeStruct code) throws IOException {
+        return compile(code);
     }
 }

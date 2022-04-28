@@ -48,9 +48,7 @@ public class ReportServiceImpl implements ReportService {
             Report report = Report.builder()
                     .id(new ObjectId())
                     .question(request.getQuestion())
-                    .code(request.getCode())
-                    .output(map.get("stdout"))
-                    .intervieweeName("")
+                    .roomCode(request.getRoomCode())
                     .createdDate(new Date().toString())
                     .build();
 

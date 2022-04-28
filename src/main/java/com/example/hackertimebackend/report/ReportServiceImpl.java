@@ -33,7 +33,7 @@ public class ReportServiceImpl implements ReportService {
                     .code(request.getCode())
                     .output(map.get("stdout"))
                     .intervieweeName("")
-                    .createdDate(new Date())
+                    .createdDate(new Date().toString())
                     .build();
 
             reportRepository.save(report);

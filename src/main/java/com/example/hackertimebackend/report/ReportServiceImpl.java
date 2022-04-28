@@ -4,6 +4,7 @@ import com.example.hackertimebackend.WebSocket.CodeStruct;
 import com.example.hackertimebackend.WebSocket.RoomEndpoint;
 import com.example.hackertimebackend.commons.CreateReport;
 import com.example.hackertimebackend.commons.ReportRequest;
+import com.example.hackertimebackend.compiler.compileService;
 import com.example.hackertimebackend.db.models.Report;
 import com.example.hackertimebackend.db.repositories.ReportRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +22,12 @@ public class ReportServiceImpl implements ReportService {
     @Autowired
     private ReportRepository reportRepository;
     @Autowired
-    private RoomEndpoint roomEndpoint;
+    private compileService compile;
 
     @Override
     public Report updateReport(ReportRequest request) throws Exception {
         CodeStruct codeStruct = new CodeStruct("c", request.getCode());
-        Map<String, String> map = roomEndpoint.compile(codeStruct);
+        Map<String, String> map = compile.compile(codeStruct);
 
         // retrieve report based on room code
         return reportRepository.findReportByRoomCode(request.getRoomCode()).map(

@@ -47,8 +47,7 @@ public class ReportServiceImpl implements ReportService {
         ArrayList<Report> set = new ArrayList<>();
         for (int i = 0; i < arr.length; i++) {
             reportRepository.findById(arr[i].toString()).ifPresent(
-                    Report -> set.add(Report)
-            );
+                    Report -> set.add(Report));
         }
         return set;
     }

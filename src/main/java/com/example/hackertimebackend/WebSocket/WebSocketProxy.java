@@ -1,5 +1,7 @@
 package com.example.hackertimebackend.WebSocket;
 
+import java.util.Map;
+
 import com.example.hackertimebackend.OTStuff.Changes;
 import com.example.hackertimebackend.OTStuff.OT;
 import com.example.hackertimebackend.OTStuff.RowChanges;
@@ -37,10 +39,18 @@ public class WebSocketProxy {
         return null;
     }
 
-    @MessageMapping("/001")
-    @SendTo("/topic/001")
+    @MessageMapping("/{roomcode}")
+    @SendTo("/topic/{roomcode}")
     public String sendChange(String code) throws Exception {
         System.out.println("CHECKING");
         return code;
     }
+
+    @MessageMapping("/compiler/{roomcode}")
+    @SendTo("/compilerSubs/{roomcode}")
+    public Map<String, String> sendCompilerResult(Map<String, String> compile_result) {
+        System.out.println("CHECKING");
+        return compile_result;
+    }
+
 }

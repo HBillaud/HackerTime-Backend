@@ -16,10 +16,11 @@ import java.util.Date;
 public class Report {
     @Id
     private ObjectId id;
+    private String roomCode;
     private String question;
     private String code;
     private String output;
     private String intervieweeName;
     @CreatedDate
-    private Date createdDate;
+    private String createdDate;
 }

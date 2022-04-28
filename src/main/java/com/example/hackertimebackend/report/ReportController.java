@@ -51,7 +51,7 @@ public class ReportController {
             Report report = reportRepository.findReportByRoomCode(roomCode).orElseThrow(
                     () -> new Exception("Could not find report!")
             );
-            return new ResponseEntity(report, HttpStatus.OK);
+            return new ResponseEntity(report.getQuestion(), HttpStatus.OK);
         } catch (Exception e) {
             log.error("", e);
             throw e;

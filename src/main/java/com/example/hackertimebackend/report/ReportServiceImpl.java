@@ -2,7 +2,9 @@ package com.example.hackertimebackend.report;
 
 import com.example.hackertimebackend.WebSocket.CodeStruct;
 import com.example.hackertimebackend.WebSocket.RoomEndpoint;
+import com.example.hackertimebackend.commons.CreateReport;
 import com.example.hackertimebackend.commons.ReportRequest;
+import com.example.hackertimebackend.compiler.compileService;
 import com.example.hackertimebackend.db.models.Report;
 import com.example.hackertimebackend.db.repositories.ReportRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +22,29 @@ public class ReportServiceImpl implements ReportService {
     @Autowired
     private ReportRepository reportRepository;
     @Autowired
-    private RoomEndpoint roomEndpoint;
+    private compileService compile;
 
-    public Report generateReport(ReportRequest request) throws Exception {
+    @Override
+    public Report updateReport(ReportRequest request) throws Exception {
+        CodeStruct codeStruct = new CodeStruct("c", request.getCode());
+        Map<String, String> map = compile.compile(codeStruct);
+
+        // retrieve report based on room code
+        return reportRepository.findReportByRoomCode(request.getRoomCode()).map(
+                report -> {
+                    report.setCode(request.getCode());
+                    report.setOutput(map.get("stdout"));
+                    report.setIntervieweeName(request.getIntervieweeName());
+
+                    reportRepository.save(report);
+                    return report;
+                }).orElseThrow(
+                        () -> new Exception("Failed to find report!"));
+    }
+
+    @Override
+    public Report generateReport(CreateReport request) throws Exception {
         try {
-            CodeStruct codeStruct = new CodeStruct("c", request.getCode());
-            Map<String, String> map = roomEndpoint.compile(codeStruct);
-
             Report report = Report.builder()
                     .id(new ObjectId())
                     .question(request.getQuestion())
@@ -39,10 +57,11 @@ public class ReportServiceImpl implements ReportService {
             reportRepository.save(report);
             return report;
         } catch (Exception e) {
-            throw new Exception("Generating end-meeting report failed!");
+            throw new Exception("Creation of report failed!");
         }
     }
 
+    @Override
     public ArrayList<Report> getReports(ObjectId[] arr) {
         ArrayList<Report> set = new ArrayList<>();
         for (int i = 0; i < arr.length; i++) {

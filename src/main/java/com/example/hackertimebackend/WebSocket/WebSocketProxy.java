@@ -48,8 +48,8 @@ public class WebSocketProxy {
 
     @MessageMapping("/compiler/{roomcode}")
     @SendTo("/compilerSubs/{roomcode}")
-    public Map<String, String> sendCompilerResult(Map<String, String> compile_result) {
-        System.out.println("CHECKING");
+    public String sendCompilerResult(String compile_result) {
+        System.out.println("compiler result " + compile_result + " send!\n");
         return compile_result;
     }
 

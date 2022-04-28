@@ -53,6 +53,7 @@ public class compileFile {
         String line;
         String error = "";
         String output = "";
+        Process p;
         ProcessBuilder pb = new ProcessBuilder("/bin/bash",bash_name);
         long pid = -1;
         Process p = null;

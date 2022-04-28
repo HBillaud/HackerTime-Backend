@@ -26,12 +26,12 @@ public class ReportController {
 
     @PostMapping(END_MEETING_PATH)
     public ResponseEntity generateReport(
-            @RequestBody @Valid ReportRequest body, @RequestHeader(value = "Authorization") String token
+            @RequestBody @Valid ReportRequest body, @RequestHeader(value = "Authorization") String bearerToken
     ) throws Exception {
         log.info("[POST] meeting ended; generating report: {}", body);
         try {
             Report report = reportService.generateReport(body);
-            userService.addReport(report.getId(), token);
+            userService.addReport(report.getId(), bearerToken.substring(7));
             ResponseEntity response = new ResponseEntity(report, HttpStatus.CREATED);
             return response;
         } catch (Exception e) {

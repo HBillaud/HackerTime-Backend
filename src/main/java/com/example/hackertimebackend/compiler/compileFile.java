@@ -1,6 +1,5 @@
 package com.example.hackertimebackend.compiler;
 
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.validation.constraints.Null;
-
 
 public class compileFile {
 
@@ -54,9 +52,9 @@ public class compileFile {
         String error = "";
         String output = "";
         Process p;
-        ProcessBuilder pb = new ProcessBuilder("/bin/bash",bash_name);
+        ProcessBuilder pb = new ProcessBuilder("/bin/bash", bash_name);
         long pid = -1;
-        Process p = null;
+        p = null;
         try {
             p = pb.start();
             pid = p.pid();
@@ -64,12 +62,12 @@ public class compileFile {
             e.printStackTrace();
             throw e;
         }
-        
-        assert(p != null);
+
+        assert (p != null);
 
         ProcessBuilder limit = new ProcessBuilder("/bin/bash", "cpulimit -l 50 -p " + pid);
         Process limitp = limit.start();
-            
+
         BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
         BufferedReader err = new BufferedReader(new InputStreamReader(p.getErrorStream()));
         while ((line = err.readLine()) != null) {
@@ -85,11 +83,12 @@ public class compileFile {
         for (File file : folder_list) {
             if (file.isFile()) {
                 String[] splitter = file.getName().split("\\.");
-                if (splitter.length == 2 && splitter[1].equals("exe")) file.delete();
+                if (splitter.length == 2 && splitter[1].equals("exe"))
+                    file.delete();
             }
         }
 
-        String[] output_arr = {output, error};
+        String[] output_arr = { output, error };
         return output_arr;
     }
 

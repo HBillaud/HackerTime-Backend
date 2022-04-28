@@ -30,7 +30,7 @@ public class ReportController {
     ) throws Exception {
         log.info("[POST] meeting ended; generating report: {}", body);
         try {
-            Report report = reportService.generateReport(body);
+            Report report = reportService.updateReport(body);
             userService.addReport(report.getId(), bearerToken.substring(7));
             ResponseEntity response = new ResponseEntity(report, HttpStatus.CREATED);
             return response;

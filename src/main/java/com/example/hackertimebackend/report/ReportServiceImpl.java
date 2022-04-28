@@ -38,10 +38,8 @@ public class ReportServiceImpl implements ReportService {
 
                     reportRepository.save(report);
                     return report;
-                }
-        ).orElseThrow(
-                () -> new Exception("Failed to find report!")
-        );
+                }).orElseThrow(
+                        () -> new Exception("Failed to find report!"));
     }
 
     @Override
@@ -50,8 +48,10 @@ public class ReportServiceImpl implements ReportService {
             Report report = Report.builder()
                     .id(new ObjectId())
                     .question(request.getQuestion())
-                    .roomCode(request.getRoomCode())
-                    .createdDate(new Date())
+                    .code(request.getCode())
+                    .output(map.get("stdout"))
+                    .intervieweeName("")
+                    .createdDate(new Date().toString())
                     .build();
 
             reportRepository.save(report);
@@ -66,8 +66,7 @@ public class ReportServiceImpl implements ReportService {
         ArrayList<Report> set = new ArrayList<>();
         for (int i = 0; i < arr.length; i++) {
             reportRepository.findById(arr[i].toString()).ifPresent(
-                    Report -> set.add(Report)
-            );
+                    Report -> set.add(Report));
         }
         return set;
     }

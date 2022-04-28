@@ -22,5 +22,5 @@ public class Report {
     private String output;
     private String intervieweeName;
     @CreatedDate
-    private Date createdDate;
+    private String createdDate;
 }

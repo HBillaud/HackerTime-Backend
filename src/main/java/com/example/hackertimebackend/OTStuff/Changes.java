@@ -1,7 +1,8 @@
 package com.example.hackertimebackend.OTStuff;
 
+import java.util.HashMap;
+
 public class Changes {
-    public String from_user;
     public int cursor_move;
     public String change_type;
     public int Init_index;
@@ -10,8 +11,7 @@ public class Changes {
     public int size;
 
 
-    public Changes(String from_user, int cursor_move, String change_type, int Init_index, int End_index, String context, int size) {
-        this.from_user = from_user;
+    public Changes(int cursor_move, String change_type, int Init_index, int End_index, String context, int size) {
         this.cursor_move = cursor_move;
         this.change_type = change_type;
         this.Init_index = Init_index;
@@ -24,8 +24,7 @@ public class Changes {
     }
 
 
-    public Changes(String from_user, int cursor_move, String change_type, int Init_index, int End_index, int size) {
-        this.from_user = from_user;
+    public Changes(int cursor_move, String change_type, int Init_index, int End_index, int size) {
         this.cursor_move = cursor_move;
         this.change_type = change_type;
         this.Init_index = Init_index;

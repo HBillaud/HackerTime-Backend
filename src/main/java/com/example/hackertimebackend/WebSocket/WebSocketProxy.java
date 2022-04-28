@@ -1,7 +1,10 @@
 package com.example.hackertimebackend.WebSocket;
 
+import java.util.Map;
+
 import com.example.hackertimebackend.OTStuff.Changes;
 import com.example.hackertimebackend.OTStuff.OT;
+import com.example.hackertimebackend.OTStuff.RowChanges;
 import com.example.hackertimebackend.WebSocketData.InterviewRoomSetting;
 import com.example.hackertimebackend.WebSocketData.WebSocketMessage;
 import com.example.hackertimebackend.WebSocketData.WebSocketGlobalData;
@@ -21,7 +24,7 @@ public class WebSocketProxy {
 
     @MessageMapping("/{room}")
     @SendTo("/topic/{room}")
-    public Changes greeting(@DestinationVariable String room, Changes old_change) throws Exception {
+    public RowChanges greeting(@DestinationVariable String room, RowChanges old_change) throws Exception {
         if (!WebSocketGlobalData.Room_mapper.containsKey(room)) {
             System.out.println("Room " + room + " does not exist!");
             return null;
@@ -29,20 +32,25 @@ public class WebSocketProxy {
         InterviewRoomSetting shared_room = WebSocketGlobalData.AllRooms.get(WebSocketGlobalData.Room_mapper.get(room));
         System.out.println("request is from " + old_change.from_user);
         if (old_change.from_user.equals("recruiter")) {
-            System.out.println("Recruiter request to " + old_change.change_type);
             return shared_room.ot_room.recruiter_send_update(old_change);
         } else if (old_change.from_user.equals("interviewee")) {
-            System.out.println("Interviewee request to " + old_change.change_type);
             return shared_room.ot_room.interviewee_send_update(old_change);
         }
         return null;
     }
 
-
-    @MessageMapping("/001")
-    @SendTo("/topic/001")
+    @MessageMapping("/{roomcode}")
+    @SendTo("/topic/{roomcode}")
     public String sendChange(String code) throws Exception {
         System.out.println("CHECKING");
         return code;
     }
+
+    @MessageMapping("/compiler/{roomcode}")
+    @SendTo("/compilerSubs/{roomcode}")
+    public Map<String, String> sendCompilerResult(Map<String, String> compile_result) {
+        System.out.println("CHECKING");
+        return compile_result;
+    }
+
 }

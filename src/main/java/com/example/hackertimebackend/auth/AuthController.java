@@ -27,8 +27,7 @@ public class AuthController {
 
     @PostMapping(LOGIN_PATH)
     public ResponseEntity login(
-            @RequestBody @Valid UserLoginRequest userLoginRequest
-    ) throws Exception {
+            @RequestBody @Valid UserLoginRequest userLoginRequest) throws Exception {
         log.info("[POST] login request: {}", userLoginRequest);
         try {
             UserLoginResponse userLoginResponse = authService.login(userLoginRequest);
@@ -43,8 +42,7 @@ public class AuthController {
 
     @PostMapping(SIGNUP_PATH)
     public ResponseEntity signup(
-            @RequestBody @Valid UserSignupRequest userSignupRequest
-    ) throws Exception {
+            @RequestBody @Valid UserSignupRequest userSignupRequest) throws Exception {
         log.info("[POST] signup request: {}", userSignupRequest);
         try {
             UserLoginResponse userLoginResponse = authService.signup(userSignupRequest);
@@ -60,9 +58,8 @@ public class AuthController {
 
     @GetMapping(EMAIL_VERIFICATION_PATH)
     public ResponseEntity verify(
-        @RequestParam("id") String id,
-        @RequestParam("code") String code
-    ) throws Exception {
+            @RequestParam("id") String id,
+            @RequestParam("code") String code) throws Exception {
         log.info("[GET] verify email: {} with token: {}", id, code);
         try {
             authService.verify(id, code);

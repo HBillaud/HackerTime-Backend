@@ -55,13 +55,19 @@ public class compileFile {
         String output = "";
         ProcessBuilder pb = new ProcessBuilder("/bin/bash",bash_name);
         long pid = -1;
+        Process p = null;
         try {
-            Process p = pb.start();
+            p = pb.start();
             pid = p.pid();
         } catch (IOException e) {
             e.printStackTrace();
             throw e;
         }
+        
+        assert(p != null);
+
+        ProcessBuilder limit = new ProcessBuilder("/bin/bash", "cpulimit -l 50 -p " + pid);
+        Process limitp = limit.start();
             
         BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
         BufferedReader err = new BufferedReader(new InputStreamReader(p.getErrorStream()));

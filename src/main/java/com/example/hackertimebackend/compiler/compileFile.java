@@ -33,14 +33,17 @@ public class compileFile {
         return name;
     }
 
-    public String generate_bash_script(String file_name) throws IOException {
+    public String generate_bash_script(String file_name, String type) throws IOException {
         System.err.println("file_name_is:\n" + file_name);
         String[] no_suffix = file_name.split("\\.");
         String bash_name = no_suffix[0] + ".sh";
         File bash = new File(bash_name);
         bash.createNewFile();
         BufferedWriter writer = new BufferedWriter(new FileWriter(bash));
-        writer.write("gcc -o " + no_suffix[0] + ".exe " + file_name + "\n./" + no_suffix[0] + ".exe");
+        if (type.equals("C") || type.equals("c"))
+            writer.write("gcc -o " + no_suffix[0] + ".exe " + file_name + "\n./" + no_suffix[0] + ".exe");
+        else if (type.equals("Cpp") || type.equals("cpp"))
+            writer.write("g++ -o " + no_suffix[0] + ".exe " + file_name + "\n./" + no_suffix[0] + ".exe");
         writer.close();
         Hitman hitman = new Hitman(Hitman_kill_count, bash_name);
         hitman.start();
@@ -98,6 +101,8 @@ public class compileFile {
         String name;
         if (type.equals("C") || type.equals("c")) {
             name = dateFormat.format(date) + ".c";
+        } else if (type.equals("Cpp") || type.equals("cpp")) {
+            name = dateFormat.format(date) + ".cpp";
         } else {
             return "Not Supported!";
         }

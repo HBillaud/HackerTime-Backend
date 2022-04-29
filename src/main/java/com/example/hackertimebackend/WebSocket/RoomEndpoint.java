@@ -70,7 +70,10 @@ public class RoomEndpoint {
     @PostMapping("/sync")
     public String sync(@RequestBody String roomcode) throws IOException {
         if (!WebSocketGlobalData.Room_mapper.containsKey(roomcode)) {
-            System.out.println("Room " + roomcode + " does not exist!");
+            System.out.println("Room " + roomcode + " does not exist!\nAll rooms we have now is:\n");
+            for (String out : WebSocketGlobalData.Room_mapper.keySet()) {
+                System.out.println(out + "\n");
+            }
             return null;
         }
         InterviewRoomSetting shared_room = WebSocketGlobalData.AllRooms

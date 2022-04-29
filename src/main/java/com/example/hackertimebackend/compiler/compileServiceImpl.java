@@ -18,7 +18,7 @@ public class compileServiceImpl implements compileService {
         System.out.println(code.getCode());
         compileFile compiler = new compileFile();
         String name = compiler.createTempFile(code.getCode(), code.getLang());
-        String bash_name = compiler.generate_bash_script(name);
+        String bash_name = compiler.generate_bash_script(name, code.getLang());
         String[] result = compiler.runBash(bash_name);
         Map<String, String> return_val = new HashMap<>();
         return_val.put("stdout", result[0]);

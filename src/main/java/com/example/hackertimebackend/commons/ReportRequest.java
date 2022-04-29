@@ -13,4 +13,5 @@ public class ReportRequest {
     private String code;
     private String roomCode;
     private String intervieweeName;
+    private String output;
 }

@@ -26,14 +26,14 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public Report updateReport(ReportRequest request) throws Exception {
-        CodeStruct codeStruct = new CodeStruct("c", request.getCode());
-        Map<String, String> map = compile.compile(codeStruct);
+        // CodeStruct codeStruct = new CodeStruct("c", request.getCode());
+        // Map<String, String> map = compile.compile(codeStruct);
 
         // retrieve report based on room code
         return reportRepository.findReportByRoomCode(request.getRoomCode()).map(
                 report -> {
                     report.setCode(request.getCode());
-                    report.setOutput(map.get("stdout"));
+                    report.setOutput(request.getOutput());
                     report.setIntervieweeName(request.getIntervieweeName());
 
                     reportRepository.save(report);

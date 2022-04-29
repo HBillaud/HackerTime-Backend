@@ -101,6 +101,4 @@ class UserServiceTest {
         assertThrows(IllegalArgumentException.class,
                 () -> userService.getUser(""));
     }
-
-
 }

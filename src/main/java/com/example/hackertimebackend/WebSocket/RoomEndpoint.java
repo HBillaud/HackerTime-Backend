@@ -42,7 +42,7 @@ public class RoomEndpoint {
         }
         return buffer.toString();
     }
-    
+
     @PostMapping("/hostroom")
     public ResponseEntity create_room(@RequestBody @Valid RoomRequest request) throws Exception {
         try {
@@ -64,5 +64,17 @@ public class RoomEndpoint {
     @PostMapping("/getCode")
     public Map<String, String> compile_code(@RequestBody CodeStruct code) throws IOException {
         return compile.compile(code);
+    }
+
+    @CrossOrigin
+    @PostMapping("/sync")
+    public String sync(@RequestBody String roomcode) throws IOException {
+        if (!WebSocketGlobalData.Room_mapper.containsKey(roomcode)) {
+            System.out.println("Room " + roomcode + " does not exist!");
+            return null;
+        }
+        InterviewRoomSetting shared_room = WebSocketGlobalData.AllRooms
+                .get(WebSocketGlobalData.Room_mapper.get(roomcode));
+        return shared_room.ot_room.actual_code;
     }
 }

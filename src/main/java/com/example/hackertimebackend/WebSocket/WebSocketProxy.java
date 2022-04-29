@@ -43,8 +43,15 @@ public class WebSocketProxy {
 
     @MessageMapping("/{roomcode}")
     @SendTo("/topic/{roomcode}")
-    public String sendChange(String code) throws Exception {
+    public String sendChange(@DestinationVariable String roomcode, String code) throws Exception {
         System.out.println("CHECKING");
+        if (!WebSocketGlobalData.Room_mapper.containsKey(roomcode)) {
+            System.out.println("Room " + roomcode + " does not exist!");
+            return null;
+        }
+        InterviewRoomSetting shared_room = WebSocketGlobalData.AllRooms
+                .get(WebSocketGlobalData.Room_mapper.get(roomcode));
+        shared_room.ot_room.actual_code = code;
         return code;
     }
 

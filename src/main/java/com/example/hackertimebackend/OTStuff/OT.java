@@ -6,6 +6,7 @@ import java.util.HashMap;
 public class OT {
 
     public HashMap<Integer, String> common_context;
+    public String actual_code;
     public OTUser recruiter;
     public OTUser interviewee;
     public ArrayList<String> recruiter_queue;

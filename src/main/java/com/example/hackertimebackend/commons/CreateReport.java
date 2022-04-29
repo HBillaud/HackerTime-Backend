@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReportRequest {
-    private String code;
+public class CreateReport {
+    private String question;
     private String roomCode;
-    private String intervieweeName;
 }

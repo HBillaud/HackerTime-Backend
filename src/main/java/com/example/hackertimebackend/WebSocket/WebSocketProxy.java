@@ -22,22 +22,24 @@ public class WebSocketProxy {
         System.out.println("Proxy Initialized!");
     }
 
-    @MessageMapping("/{room}")
-    @SendTo("/topic/{room}")
-    public RowChanges greeting(@DestinationVariable String room, RowChanges old_change) throws Exception {
-        if (!WebSocketGlobalData.Room_mapper.containsKey(room)) {
-            System.out.println("Room " + room + " does not exist!");
-            return null;
-        }
-        InterviewRoomSetting shared_room = WebSocketGlobalData.AllRooms.get(WebSocketGlobalData.Room_mapper.get(room));
-        System.out.println("request is from " + old_change.from_user);
-        if (old_change.from_user.equals("recruiter")) {
-            return shared_room.ot_room.recruiter_send_update(old_change);
-        } else if (old_change.from_user.equals("interviewee")) {
-            return shared_room.ot_room.interviewee_send_update(old_change);
-        }
-        return null;
-    }
+    // @MessageMapping("/{room}")
+    // @SendTo("/topic/{room}")
+    // public RowChanges greeting(@DestinationVariable String room, RowChanges
+    // old_change) throws Exception {
+    // if (!WebSocketGlobalData.Room_mapper.containsKey(room)) {
+    // System.out.println("Room " + room + " does not exist!");
+    // return null;
+    // }
+    // InterviewRoomSetting shared_room =
+    // WebSocketGlobalData.AllRooms.get(WebSocketGlobalData.Room_mapper.get(room));
+    // System.out.println("request is from " + old_change.from_user);
+    // if (old_change.from_user.equals("recruiter")) {
+    // return shared_room.ot_room.recruiter_send_update(old_change);
+    // } else if (old_change.from_user.equals("interviewee")) {
+    // return shared_room.ot_room.interviewee_send_update(old_change);
+    // }
+    // return null;
+    // }
 
     @MessageMapping("/{roomcode}")
     @SendTo("/topic/{roomcode}")
@@ -48,8 +50,8 @@ public class WebSocketProxy {
 
     @MessageMapping("/compiler/{roomcode}")
     @SendTo("/compilerSubs/{roomcode}")
-    public String sendCompilerResult(String compile_result) {
-        System.out.println("compiler result " + compile_result + " send!\n");
+    public String sendCompilerResult(@DestinationVariable String roomcode, String compile_result) {
+        System.out.println("compiler result to roomcode " + roomcode + " is " + compile_result + " send!\n");
         return compile_result;
     }
 

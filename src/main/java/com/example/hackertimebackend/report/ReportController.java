@@ -1,6 +1,7 @@
 package com.example.hackertimebackend.report;
 
 import com.example.hackertimebackend.commons.ReportRequest;
+import com.example.hackertimebackend.commons.ReportRequestRoomCode;
 import com.example.hackertimebackend.db.models.Report;
 import com.example.hackertimebackend.db.repositories.ReportRepository;
 import com.example.hackertimebackend.user.UserService;
@@ -45,10 +46,11 @@ public class ReportController {
 
     @GetMapping("get-question")
     public ResponseEntity getQuestion(
-            @RequestBody @Valid String roomCode
+            @RequestBody @Valid ReportRequestRoomCode roomCode
     ) throws Exception {
+        log.info("[GET] request to find Report with roomCode {}", roomCode.getRoomCode());
         try {
-            Report report = reportRepository.findReportByRoomCode(roomCode).orElseThrow(
+            Report report = reportRepository.findReportByRoomCode(roomCode.getRoomCode()).orElseThrow(
                     () -> new Exception("Could not find report!")
             );
             return new ResponseEntity(report.getQuestion(), HttpStatus.OK);

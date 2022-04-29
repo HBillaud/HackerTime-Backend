@@ -30,8 +30,8 @@ public class ReportController {
 
     @PostMapping(END_MEETING_PATH)
     public ResponseEntity generateReport(
-            @RequestBody @Valid ReportRequest body, @RequestHeader(value = "Authorization") String bearerToken
-    ) throws Exception {
+            @RequestBody @Valid ReportRequest body, @RequestHeader(value = "Authorization") String bearerToken)
+            throws Exception {
         log.info("[POST] meeting ended; generating report: {}", body);
         try {
             Report report = reportService.updateReport(body);
@@ -46,13 +46,11 @@ public class ReportController {
 
     @GetMapping("get-question")
     public ResponseEntity getQuestion(
-            @RequestBody @Valid ReportRequestRoomCode roomCode
-    ) throws Exception {
+            @RequestParam @Valid ReportRequestRoomCode roomCode) throws Exception {
         log.info("[GET] request to find Report with roomCode {}", roomCode.getRoomCode());
         try {
             Report report = reportRepository.findReportByRoomCode(roomCode.getRoomCode()).orElseThrow(
-                    () -> new Exception("Could not find report!")
-            );
+                    () -> new Exception("Could not find report!"));
             return new ResponseEntity(report.getQuestion(), HttpStatus.OK);
         } catch (Exception e) {
             log.error("", e);

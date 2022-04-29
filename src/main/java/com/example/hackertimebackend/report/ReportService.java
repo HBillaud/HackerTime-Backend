@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 public interface ReportService {
     Report updateReport(ReportRequest request) throws Exception;
+
     ArrayList<Report> getReports(ObjectId[] arr);
+
     Report generateReport(CreateReport request) throws Exception;
 }

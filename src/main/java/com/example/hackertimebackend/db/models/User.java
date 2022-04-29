@@ -34,8 +34,7 @@ public class User {
     @Override
     public String toString() {
         return String.format(
-                "User[email=%s, name=%s, companyName=%s]", email, name, companyName
-        );
+                "User[email=%s, name=%s, companyName=%s]", email, name, companyName);
     }
 
     public ObjectId[] addReportId(ObjectId id) {

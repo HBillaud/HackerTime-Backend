@@ -28,77 +28,75 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest
 @AutoConfigureMockRestServiceServer
 class UserServiceTest {
-    @Mock
-    private JwtUtils jwtUtilsMock;
-    @Mock
-    private ReportService reportServiceMock;
-    @Mock
-    private UserMapper userMapperMock;
-    @Mock
-    private UserRepository userRepositoryMock;
-    @InjectMocks
-    private UserServiceImpl userService;
+        @Mock
+        private JwtUtils jwtUtilsMock;
+        @Mock
+        private ReportService reportServiceMock;
+        @Mock
+        private UserMapper userMapperMock;
+        @Mock
+        private UserRepository userRepositoryMock;
+        @InjectMocks
+        private UserServiceImpl userService;
 
-    @Autowired
-    private AuthService authServiceMock;
+        @Autowired
+        private AuthService authServiceMock;
 
-    private UserLoginRequest request = new UserLoginRequest(
-            "hpcbillaud@gmail.com",
-            "test");
-    private User user = new User(
-            "hpcbillaud@gmail.com",
-            "John Wick",
-            "N/A",
-            "$2a$10$u2JehPNmeoVDhfk7GBSiseFySTS9I5MokHFXD.XZ.dOMsrKqZhb.G",
-            new ObjectId[0],
-            true,
-            "da91a2c8-4a00-4368-b922-7a035d306231",
-            null
-    );
-    private UserLoginResponse response = new UserLoginResponse(
-            "John Wick",
-            "hpcbillaud@gmail.com",
-            "N/A",
-            ""
-    );
-    private UserResponse userResponse = new UserResponse(
-            "hpcbillaud@gmail.com",
-            "John Wick",
-            "N/A",
-            new ArrayList<>()
-    );
-    private UserLoginResponse loggedUser;
+        private UserLoginRequest request = new UserLoginRequest(
+                        "hpcbillaud@gmail.com",
+                        "test");
+        private User user = new User(
+                        "hpcbillaud@gmail.com",
+                        "John Wick",
+                        "N/A",
+                        "$2a$10$u2JehPNmeoVDhfk7GBSiseFySTS9I5MokHFXD.XZ.dOMsrKqZhb.G",
+                        new ObjectId[0],
+                        true,
+                        "da91a2c8-4a00-4368-b922-7a035d306231",
+                        null);
+        private UserLoginResponse response = new UserLoginResponse(
+                        "John Wick",
+                        "hpcbillaud@gmail.com",
+                        "N/A",
+                        "");
+        private UserResponse userResponse = new UserResponse(
+                        "hpcbillaud@gmail.com",
+                        "John Wick",
+                        "N/A",
+                        new ArrayList<>());
+        private UserLoginResponse loggedUser;
 
+        @BeforeEach
+        public void setup() throws Exception {
+                loggedUser = authServiceMock.login(
+                                request);
 
-    @BeforeEach
-    public void setup() throws Exception {
-        loggedUser = authServiceMock.login(
-                request
-        );
+                /*
+                 * RecursiveComparisonConfiguration ignoreIdConfig = new
+                 * RecursiveComparisonConfiguration();
+                 * ignoreIdConfig.ignoreFields("jwtToken");
+                 * assertThat(loggedUser).usingRecursiveComparison(ignoreIdConfig)
+                 * .isEqualTo(response);
+                 */
+        }
 
-        /*RecursiveComparisonConfiguration ignoreIdConfig = new RecursiveComparisonConfiguration();
-        ignoreIdConfig.ignoreFields("jwtToken");
-        assertThat(loggedUser).usingRecursiveComparison(ignoreIdConfig)
-                .isEqualTo(response);*/
-    }
+        @Test
+        public void whenValidInputGetUserThenReturnSuccess() throws Exception {
+                given(jwtUtilsMock.getUserNameFromJwtToken(loggedUser.getJwtToken())).willReturn(loggedUser.getEmail());
+                given(userRepositoryMock.findById(loggedUser.getEmail())).willReturn(Optional.of(user));
+                given(userMapperMock.userToUserResponse(user)).willReturn(userResponse);
 
-    @Test
-    public void whenValidInputGetUserThenReturnSuccess() throws Exception {
-        given(jwtUtilsMock.getUserNameFromJwtToken(loggedUser.getJwtToken())).willReturn(loggedUser.getEmail());
-        given(userRepositoryMock.findById(loggedUser.getEmail())).willReturn(Optional.of(user));
-        given(userMapperMock.userToUserResponse(user)).willReturn(userResponse);
+                UserResponse actual = userService.getUser(loggedUser.getJwtToken());
+                userResponse.setReports(actual.getReports());
 
-        UserResponse actual = userService.getUser(loggedUser.getJwtToken());
-        userResponse.setReports(actual.getReports());
+                assertThat(actual).isEqualTo(userResponse);
+        }
 
-        assertThat(actual).isEqualTo(userResponse);
-    }
+        @Test
+        public void whenInvalidInputGetUserThenFail() throws IllegalArgumentException {
+                given(jwtUtilsMock.getUserNameFromJwtToken("")).willThrow(IllegalArgumentException.class);
 
-    @Test
-    public void whenInvalidInputGetUserThenFail() throws IllegalArgumentException {
-        given(jwtUtilsMock.getUserNameFromJwtToken("")).willThrow(IllegalArgumentException.class);
-
-        assertThrows(IllegalArgumentException.class,
-                () -> userService.getUser(""));
-    }
+                assertThrows(IllegalArgumentException.class,
+                                () -> userService.getUser(""));
+        }
 }
